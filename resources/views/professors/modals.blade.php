@@ -1,4 +1,4 @@
-<!-- Modal for adding a new room -->
+<!-- Modal for adding a new professor -->
 <div class="modal custom-modal" id="resource-modal">
     <div class="modal-dialog">
         <div class="modal-content">

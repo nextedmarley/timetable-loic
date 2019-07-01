@@ -4,6 +4,7 @@ namespace App\Services;
 
 use DB;
 use App\Models\CollegeClass;
+use Illuminate\Support\Facades\Auth;
 
 class CollegeClassesService extends AbstractService
 {
@@ -41,21 +42,25 @@ class CollegeClassesService extends AbstractService
      * Add a new college class
      *
      * @param array $data Data for creating a new college class
-     * @return App\Models\CollegeClass Newly created class
+     * @return CollegeClass
      */
     public function store($data = [])
     {
-        $class = CollegeClass::create([
-            'name' => $data['name'],
-            'size' => $data['size']
-        ]);
+        $class = new CollegeClass();
+        $class->name = $data['name'];
+        $class->size = $data['size'];
+        $class->school_id = Auth::user()->school->id;
+        $class->save();
 
         if (!$class) {
             return null;
         }
 
-        $class->unavailable_rooms()->sync($data['unavailable_rooms']);
-        $class->courses()->sync($data['courses']);
+        if(!empty($data['unavailable_rooms']))
+            $class->unavailable_rooms()->sync($data['unavailable_rooms']);
+
+        if(!empty($data['courses']))
+            $class->courses()->sync($data['courses']);
 
         return $class;
     }

@@ -68,7 +68,8 @@ class NewTimetablesGenerated extends Notification
         $data = [
             'schedules' => $schedules,
             'professor' => $notifiable,
-            'url' => $url
+            'url' => $url,
+            'profUrl'=>url('/professor/'. $notifiable->id.'/timetable/'.$this->timetable->id)
         ];
 
         return (new MailMessage)

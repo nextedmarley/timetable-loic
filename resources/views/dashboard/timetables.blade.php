@@ -6,7 +6,7 @@
                 <tr class="table-head">
                     <td>Timetable Name</td>
                     <td>Status</td>
-                    <td style="width: 10%">Print</td>
+                    <td style="width: 20%">Action</td>
                 </tr>
             </thead>
 
@@ -20,6 +20,9 @@
                         <a href="{{ URL::to('/timetables/view/' . $timetable->id) }}"
                            class="btn btn-sm btn-primary print-btn"
                         data-id="{{ $timetable->id }}"><span class="fa fa-print"></span> PRINT</a>
+                        <a href="{{ url('/timetables/view/' . $timetable->id) }}"
+                           class="btn btn-sm btn-primary "
+                        target="blank"><span class="fa fa-eye"></span> VIEW</a>
                         @else
                         N/A
                         @endif

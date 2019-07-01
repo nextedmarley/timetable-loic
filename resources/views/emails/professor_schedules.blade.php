@@ -16,4 +16,7 @@
 </div>
 
 <a style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; text-decoration: none; padding-top: 5px;
+padding-bottom: 5px; padding-left: 5px; padding-right: 5px; background: #5F9EA0; color: #FFFFFF; margin-left: 10%;" href="{{ $profUrl }}">Click here to view online</a>
+
+<a style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; text-decoration: none; padding-top: 5px;
 padding-bottom: 5px; padding-left: 5px; padding-right: 5px; background: #5F9EA0; color: #FFFFFF; margin-left: 10%;" href="{{ $url }}">Click here to view all timetables</a>

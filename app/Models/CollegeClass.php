@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Scopes\SchoolScope;
+
 class CollegeClass extends Model
 {
     /**
@@ -35,5 +37,30 @@ class CollegeClass extends Model
     public function scopeHavingNoCourses($query)
     {
         return $query->has('courses', '<', 1);
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SchoolScope());
+    }
+
+    /**
+     * Declare relationship between a timetable his school
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function setSchoolIdAttribute($value){
+        $this->attributes['school_id'] = $this->authUser->school->id;
     }
 }

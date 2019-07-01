@@ -40,19 +40,19 @@ class UsersController extends Controller
 
         $this->validate($request, $rules);
 
-        $user = User::first();
+        $user = User::where('name',$request->login)->first();
 
         if (!$user) {
-            return redirect()->back()->withErrors(['No user account has been set up yet']);
+            return redirect()->back()->withErrors(['login'=>'Login not found']);
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            return redirect()->back()->withErrors(['Password is invalid']);
+            return redirect()->back()->withErrors(['password'=>'Password is invalid']);
         }
 
         Auth::login($user);
 
-        return redirect('/');
+        return redirect('/dashboard');
     }
 
     /**

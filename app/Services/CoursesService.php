@@ -4,6 +4,7 @@ namespace App\Services;
 
 use DB;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class CoursesService extends AbstractService
 {
@@ -32,10 +33,11 @@ class CoursesService extends AbstractService
      */
     public function store($data = [])
     {
-        $course = Course::create([
-            'name' => $data['name'],
-            'course_code' => $data['course_code']
-        ]);
+        $course = new Course();
+        $course->name = $data['name'];
+        $course->course_code =  $data['course_code'];
+        $course->school_id = Auth::user()->school->id;
+        $course->save();
 
         if (!$course) {
             return null;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\SchoolScope;
 use DB;
 class Course extends Model
 {
@@ -37,7 +38,7 @@ class Course extends Model
      * Declare a relationship between this course and the
      * professors that teach it
      *
-     * @return Illuminate\Database\Eloquent
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function professors()
     {
@@ -48,7 +49,7 @@ class Course extends Model
      * Declare a relationship between this course and the classes
      * that offer it
      *
-     * @return Illuminate\Database\Eloquent
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function classes()
     {
@@ -63,5 +64,30 @@ class Course extends Model
     public function scopeHavingNoProfessors($query)
     {
         return $query->has('professors', '<', 1);
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new SchoolScope());
+    }
+
+    /**
+     * Declare relationship between a timetable his school
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
+    public function setSchoolIdAttribute($value){
+        $this->attributes['school_id'] = $this->authUser->school->id;
     }
 }

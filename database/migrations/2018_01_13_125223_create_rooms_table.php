@@ -17,6 +17,13 @@ class CreateRoomsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('capacity')->unsigned();
+
+            $table->integer('school_id')->unsigned();
+            $table->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('cascade');
+                
             $table->timestamps();
         });
     }

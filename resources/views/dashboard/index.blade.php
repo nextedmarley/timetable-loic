@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('title')
-Dashboard
+    {{ __('Dashboard') }}
 @endsection
 
 @section('content')
 <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10 page-container">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 page-title">
-            <h1><span class="fa fa-dashboard"></span> Dashboard</h1>
+            <h1><span class="fa fa-dashboard"></span> {{ __('Dashboard') }} @include('partials.school_name')</h1>
         </div>
     </div>
 
@@ -37,7 +37,7 @@ Dashboard
 
         <div class="row" style="margin-top: 50px">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-lg-offset-4 col-md-offset-4 col-sm-offset-4">
-                <button class="btn-primary timetable-btn btn-block" id="resource-add-button"><i class="fa fa-calendar"></i> Generate New Timetables</button>
+                <button class="btn-primary timetable-btn btn-block" id="resource-add-button"><i class="fa fa-calendar"></i> {{__('Generate New Timetables') }}</button>
             </div>
         </div>
     </div>
@@ -50,5 +50,5 @@ Dashboard
 @endsection
 
 @section('scripts')
-<script src="{{URL::asset('/js/dashboard/index.js')}}"></script>
+<script src="{{asset('/js/dashboard/index.js')}}"></script>
 @endsection

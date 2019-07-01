@@ -16,6 +16,12 @@ class CreateProfessorsTable extends Migration
         Schema::create('professors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+
+            $table->integer('school_id')->unsigned();
+            $table->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

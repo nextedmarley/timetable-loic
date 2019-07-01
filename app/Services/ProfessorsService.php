@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Professor;
+use Illuminate\Support\Facades\Auth;
 
 class ProfessorsService extends AbstractService
 {
@@ -27,10 +28,12 @@ class ProfessorsService extends AbstractService
      */
     public function store($data = [])
     {
-        $professor = Professor::create([
-            'name' => $data['name'],
-            'email' => $data['email']
-        ]);
+        $professor = new Professor();
+        $professor->name =  $data['name'];
+        $professor->email =  $data['email'];
+        $professor->school_id = Auth::user()->school->id;
+        $professor->save();
+
 
         if (!$professor) {
             return null;

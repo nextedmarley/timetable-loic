@@ -31,4 +31,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(SecurityQuestion::class, 'security_question_id');
     }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class, 'school_id');
+    }
+
 }

@@ -17,6 +17,13 @@ class CreateClassesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('size')->unsigned();
+
+            $table->integer('school_id')->unsigned();
+            $table->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('cascade');
+                
             $table->timestamps();
         });
     }

@@ -17,6 +17,13 @@ class CreateTimeslotsTable extends Migration
             $table->increments('id');
             $table->string('time');
             $table->integer('rank')->unsigned()->nullable();
+
+            $table->integer('school_id')->unsigned();
+            $table->foreign('school_id')
+                ->references('id')
+                ->on('schools')
+                ->onDelete('cascade');
+                
             $table->timestamps();
         });
     }

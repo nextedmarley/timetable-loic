@@ -1,7 +1,7 @@
 <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2 sidebar">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 site-logo-container">
-            <h3 class="text-center site-logo">timetable</h3>
+            <h3 class="text-center site-logo">G-Timetable</h3>
         </div>
     </div>
 

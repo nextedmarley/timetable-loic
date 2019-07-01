@@ -11,9 +11,13 @@
 |
 */
 
+Route::get('/professor/{professorId}/timetable/{timetableId}','ProfessorsController@timetable');
+
 Route::get('/', function() {
-    return redirect('/dashboard');
+    return view('welcome');
 });
+
+Route::get('/welcome','WelcomeController@index')->name('welcome');
 
 Route::get('/dashboard', 'DashboardController@index');
 
@@ -44,7 +48,7 @@ Route::post('/users/activate', 'UsersController@activateUser');
 Route::get('/home', 'HomeController@index')->name('home');
 
 // Other account related routes
-Route::get('/login', 'UsersController@showLoginPage');
+Route::get('/login', 'UsersController@showLoginPage')->name('login');
 Route::post('/login', 'UsersController@loginUser');
 Route::get('/request_reset', 'UsersController@showPasswordRequestPage');
 Route::post('/request_reset', 'UsersController@requestPassword');

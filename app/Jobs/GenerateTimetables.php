@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Timetable;
+use App\Scopes\SchoolScope;
 use App\Services\GeneticAlgorithm\TimetableGA;
 
 use Illuminate\Bus\Queueable;
@@ -35,6 +36,7 @@ class GenerateTimetables implements ShouldQueue
     public function handle()
     {
         \Log::info('Generating timetable');
+        SchoolScope::$schoolId = $this->timetable->school_id;
         $timetableGA = new TimetableGA($this->timetable);
         $timetableGA->run();
     }

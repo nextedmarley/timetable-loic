@@ -72,21 +72,22 @@ class TimetablesController extends Controller
         }
 
         if (count($errors)) {
-            return Response::json(['errors' => $errors], 422);
+            return response()->json(['errors' => $errors], 422);
         }
 
         $otherChecks = $this->service->checkCreationConditions();
-
         if (count($otherChecks)) {
-            return Response::json(['errors' => $otherChecks], 422);
+            return response()->json(['errors' => $otherChecks], 422);
         }
 
-        $timetable = Timetable::create([
-            'user_id' => Auth::user()->id,
-            'academic_period_id' => $request->academic_period_id,
-            'status' => 'IN PROGRESS',
-            'name' => $request->name
-        ]);
+        $timetable = new Timetable();
+        $timetable->user_id =  Auth::user()->id;
+        $timetable->academic_period_id =  $request->academic_period_id;
+        $timetable->status = 'IN PROGRESS';
+        $timetable->name =  $request->name;
+        $timetable->school_id =  Auth::user()->school->id;
+        $timetable->save();
+
 
         if ($timetable) {
             $timetable->days()->sync($dayIds);
@@ -94,7 +95,7 @@ class TimetablesController extends Controller
 
         event(new TimetablesRequested($timetable));
 
-        return Response::json(['message' => 'Timetables are being generated.Check back later'], 200);
+        return response()->json(['message' => 'Timetables are being generated.Check back later'], 200);
     }
 
     /**

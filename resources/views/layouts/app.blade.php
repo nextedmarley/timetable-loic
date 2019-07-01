@@ -13,9 +13,8 @@
 
 		<title>@yield('title') | Timetable</title>
     </head>
-
     <body>
-        <div class="container-fluid">
+     <div class="container-fluid">
             <div class="row">
                 @include('partials.sidebar')
 
@@ -28,5 +27,9 @@
         <!-- Scripts -->
         @include('partials.scripts')
         @yield('scripts')
+
+    <footer class="row">
+        @include('partials.footer')
+    </footer>
     </body>
 </html>

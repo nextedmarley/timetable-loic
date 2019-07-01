@@ -11,7 +11,7 @@ class UnavailableTimeslot extends Model
     /**
      * Get the day this unavailable period exists in
      *
-     * @return App\Models\Day Day
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function day()
     {
@@ -21,7 +21,7 @@ class UnavailableTimeslot extends Model
     /**
      * Get the timeslot this unavailable period exists in
      *
-     * @return App\Models\Timeslot Timeslot
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function timeslot()
     {

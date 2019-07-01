@@ -10,6 +10,7 @@ use App\Models\Course as CourseModel;
 use App\Models\Timeslot as TimeslotModel;
 use App\Models\CollegeClass as CollegeClassModel;
 use App\Models\Professor as ProfessorModel;
+use App\Models\ProfessorSchedule;
 
 class TimetableRenderer
 {
@@ -164,4 +165,97 @@ class TimetableRenderer
 
         return $data;
     }
+
+
+        /**
+     * Get an associative array with data for constructing professor timetable
+     *
+     * @param $professor Professor
+     * @param $timetable Timetable corresponding timetable
+     * @return array Schedules data
+     */
+    public function getProfessorSchedules($professor,$timetable)
+    {
+       
+        $schedules = [];
+        $days = DayModel::all();
+
+        foreach ($days as $day) {
+            $schedules[$day->short_name] = ProfessorSchedule::with(['timetable', 'professor', 'course', 'day', 'timeslot', 'room', 'college_class'])
+                ->where('timetable_id', $timetable->id)
+                ->where('professor_id', $professor->id)
+                ->where('day_id', $day->id)
+                ->join('timeslots', 'timeslots.id', '=', 'professor_schedules.timeslot_id')
+                ->orderBy('timeslots.rank')
+                ->get();
+        } 
+
+        return $schedules;
+    }
+
+    public function renderProfessorSchedule($schedules){
+
+        $timeslots = TimeslotModel::orderBy('rank', 'ASC')->get();
+
+        $tableTemplate = '<h3 class="text-center">{TITLE}</h3>
+                         <div style="page-break-after: always">
+                            <table class="table table-bordered">
+                                <thead>
+                                    {HEADING}
+                                </thead>
+                                <tbody>
+                                    {BODY}
+                                </tbody>
+                            </table>
+                        </div>';
+
+        $content = "";
+        $final="";
+
+        $header = "<tr class='table-head'>";
+        $header .= "<td>Days</td>";
+
+        foreach ($timeslots as $timeslot) {
+            $header .= "\t<td>" . $timeslot->time . "</td>";
+        }
+
+        $header .= "</tr>";
+
+        foreach ($schedules as $day => $schedule) {
+            $content.="<tr><td>".$day."</td>";    
+            foreach ($timeslots as $key => $timeslot) {
+                foreach ($schedules[$day] as $i => $period) {
+                    if ($timeslot->id == $period->timeslot->id) {
+                        $content .= "<td class='text-center'>";
+                            $courseCode = $period->course->course_code;
+                            $courseName = $period->course->course_name;
+                            $professor = $period->professor;
+                            $room = $period->room->name;
+
+                            $content .= "<span class='course_code'>{$courseCode}</span><br />";
+                            $content .= "<span class='room pull-left'>{$room}</span>";
+                            $content .= "<span class='professor pull-right'>{$professor->name}</span>";
+
+                            $content .= "</td>";
+                            break;
+                    }else{
+                         $content.= "<td></td>";
+                    }   
+                }
+                if(count($schedules[$day])==0)  $content.= "<td></td>";                 
+            }
+            $content.= "</tr>";
+        }
+
+        $title= $this->timetable->name." | ".$professor->name;
+
+        $final .= str_replace(['{TITLE}', '{HEADING}', '{BODY}'], [$title, $header, $content], $tableTemplate);
+
+        $path = 'public/timetables/prof_'.$professor->id.'timetable_' . $this->timetable->id . '.html';
+        Storage::put($path, $final);
+        $timetableData = $final ;
+        $timetableName = $title;
+        return view('timetables.view', compact('timetableData', 'timetableName'));
+    }
+
 }

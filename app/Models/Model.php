@@ -3,10 +3,20 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Auth\AuthManager;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Facades\Auth;
 
 class Model extends Eloquent
 {
+    protected $authUser;
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->authUser = Auth::user();
+    }
+
     /**
      * Make almost all fields mass unsignable
      *

@@ -67,6 +67,7 @@ class GeneticAlgorithm
         $this->tournamentSize = $tournamentSize;
         $this->temperature = 1.0;
         $this->coolingRate = 0.001;
+
     }
 
     /**
@@ -76,7 +77,9 @@ class GeneticAlgorithm
      */
     public function initPopulation($timetable)
     {
+        print('initializing  pop...');
         $population = new Population($this->populationSize, $timetable);
+        print('\ninitializing  pop finished!');
 
         return $population;
     }

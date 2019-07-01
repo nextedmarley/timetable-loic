@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Response;
 use Illuminate\Http\Request;
 
@@ -71,6 +72,8 @@ class RoomsController extends Controller
         $this->validate($request, $rules, $messages);
 
         $room = $this->service->store($request->all());
+        $room->school_id = Auth::user()->school->id;
+        $room->save();
 
         if ($room) {
             return Response::json(['message' => 'Room added'], 200);

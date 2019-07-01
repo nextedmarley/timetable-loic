@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Response;
 use Illuminate\Http\Request;
 use App\Services\ProfessorsService;
+use App\Services\GeneticAlgorithm\TimetableRenderer;
 
 use App\Models\Day;
 use App\Models\Course;
 use App\Models\Timeslot;
 use App\Models\Professor;
+use App\Models\Timetable;
 use App\Models\UnavailableTimeslot;
 
 class ProfessorsController extends Controller
@@ -150,5 +152,14 @@ class ProfessorsController extends Controller
         } else {
             return Response::json(['error' => 'An unknown system error occurred'], 500);
         }
+    }
+
+    public function timetable($professorId,$timetableId){
+        $timetable = Timetable::find($timetableId);
+        $professor = Professor::find($professorId);
+
+        $timetableRenderer = new TimetableRenderer($timetable);
+
+        return $timetableRenderer->renderProfessorSchedule($timetableRenderer->getProfessorSchedules($professor,$timetable));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Response;
 use Illuminate\Http\Request;
 use App\Events\TimeslotsUpdated;
@@ -86,17 +87,20 @@ class TimeslotsController extends Controller
             if ($timeslot->containsPeriod($data['time'])) {
                 $errors = [ $data['time'] . ' falls within another timeslot (' . $timeslot->time
                     . ').Please adjust timeslots'];
-                return Response::json(['errors' => $errors], 422);
+                return response()->json(['errors' => $errors], 422);
             }
         }
 
         $timeslot = $this->service->store($data);
+        $timeslot->school_id = Auth::user()->school->id;
+        $timeslot->rank = $timeslot->id;
+        $timeslot->save();
 
         if ($timeslot) {
             event(new TimeslotsUpdated());
-            return Response::json(['message' => 'Timeslot has been added'], 200);
+            return response()->json(['message' => 'Timeslot has been added'], 200);
         } else {
-            return Response::json(['error' => 'A system error occurred'], 500);
+            return response()->json(['error' => 'A system error occurred'], 500);
         }
     }
 

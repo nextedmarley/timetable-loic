@@ -1,7 +1,7 @@
 <?php
 namespace App\Services\GeneticAlgorithm;
 
-use DB;
+
 use App\Events\TimetablesGenerated;
 
 use App\Models\Course;
@@ -10,6 +10,7 @@ use App\Models\Timeslot as TimeslotModel;
 use App\Models\Timetable as TimetableModel;
 use App\Models\Professor as ProfessorModel;
 use App\Models\CollegeClass as CollegeClassModel;
+use Illuminate\Support\Facades\DB;
 
 class TimetableGA
 {
@@ -41,7 +42,11 @@ class TimetableGA
         $timetable = new Timetable($maxContinuousSlots);
 
         // Set up rooms for the GA data using rooms data from DB
-        $rooms = RoomModel::all();
+        try{
+            $rooms = RoomModel::all();
+        }catch (\Exception $e){
+            print($e->getMessage());
+        }
 
         foreach ($rooms as $room) {
             $timetable->addRoom($room->id);
@@ -96,6 +101,7 @@ class TimetableGA
 
             $timetable->addModule($course->id, $professorIds);
         }
+        print('modules added ');
 
         // Set up class groups
         $classes = CollegeClassModel::all();
@@ -110,6 +116,8 @@ class TimetableGA
 
             $timetable->addGroup($class->id, $courseIds);
         }
+
+        print('classes added ');
 
 
         return $timetable;
